@@ -1,17 +1,33 @@
-{
-  "name": "nuvio-german-providers",
-  "version": "1.0.0",
-  "description": "Deutsche Quellen für Nuvio, portiert von Bnyro/GermanProviders",
-  "private": true,
-  "scripts": {
-    "build": "node build.js",
-    "test": "node test.js",
-    "start": "npx --yes serve -l 3000 ."
-  },
-  "devDependencies": {
-    "cheerio": "^1.1.2",
-    "crypto-js": "^4.2.0",
-    "esbuild": "^0.25.0"
-  },
-  "license": "GPL-3.0-or-later"
-}
+const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// Statische Dateien bereitstellen (falls benötigt)
+app.use('/providers', express.static(path.join(__dirname, 'providers')));
+
+// Manifest-Endpunkt für Raddon
+app.get('/manifest.json', (req, res) => {
+  const manifestPath = path.join(__dirname, 'manifest.json');
+  fs.readFile(manifestPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Manifest nicht gefunden' });
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.send(data);
+  });
+});
+
+app.get('/', (req, res) => {
+  res.send('Nuvio Raddon Server läuft!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server läuft auf Port ${PORT}`);
+});
