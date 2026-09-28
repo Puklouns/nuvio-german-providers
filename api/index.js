@@ -15,6 +15,12 @@ app.get('/manifest.json', (req, res) => {
     if (err) return res.status(500).json({ error: 'Manifest nicht gefunden' });
     
     let manifest = JSON.parse(data);
+    
+    // Nuvio verlangt zwingend eine ID – falls nicht vorhanden, fügen wir sie hier hinzu:
+    if (!manifest.id) {
+      manifest.id = "com.github.puklouns.nuvio.germanproviders";
+    }
+    
     manifest.resources = ["stream"];
     manifest.types = ["movie", "series"];
     
@@ -63,5 +69,4 @@ app.get('/', (req, res) => {
   res.send('Nuvio German Raddon Server auf Vercel läuft!');
 });
 
-// WICHTIG für Vercel: App exportieren
 module.exports = app;
