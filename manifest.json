@@ -1,4 +1,5 @@
 {
+  "id": "com.github.puklouns.nuvio.germanproviders",
   "name": "German Providers",
   "version": "1.0.3",
   "description": "Deutsche Quellen für Nuvio – portiert von Bnyro/GermanProviders (CloudStream)",
